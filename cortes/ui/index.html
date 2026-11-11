@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#121417">
+<title>SAPI</title>
+<meta name="description" content="SAPI — Sistema Autônomo de Produção para a Internet">
+<link rel="icon" type="image/png" href="/static/icone.png">
+<link rel="apple-touch-icon" href="/static/icone.png">
+<link rel="stylesheet" href="/static/style.css">
+<script>/* a porta de entrada só aparece com JS e uma vez por sessão; sem JS, a Central fica acessível */
+try { if (!sessionStorage.getItem("sapi_gate")) document.documentElement.classList.add("gate"); } catch (e) { document.documentElement.classList.add("gate"); }</script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-assuntos" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h10" /></symbol>
+    <symbol id="i-cortes" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3" /><circle cx="6" cy="18" r="3" /><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12" /></symbol>
+    <symbol id="i-producao" viewBox="0 0 24 24"><path d="M3 15h18M3 19h18M5 15v4M19 15v4" /><circle cx="8" cy="9" r="3" /><circle cx="16" cy="9" r="3" /><path d="M8 6V4M16 6V4" /></symbol>
+    <symbol id="i-pagina" viewBox="0 0 24 24"><rect x="5" y="2.5" width="14" height="19" rx="2" /><circle cx="9" cy="6.5" r="1.6" /><path d="M12 6h4M8 9.5h8M5 12h14" /></symbol>
+    <symbol id="i-prontos" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" /></symbol>
+    <symbol id="i-arquivo" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="5" rx="1" /><path d="M5 9v10h14V9M10 13h4" /></symbol>
+    <symbol id="i-relatorios" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 4.4 3.4 8.3 8 9 4.6-.7 8-4.6 8-9V6z" /><path d="m9 12 2 2 4-4" /></symbol>
+    <symbol id="i-celular" viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2" /><path d="M11 18h2" /></symbol>
+    <symbol id="i-painel" viewBox="0 0 24 24"><path d="M3 18a9 9 0 0 1 18 0" /><path d="M12 18 15.5 11" /><circle cx="12" cy="18" r="1.4" /><path d="M5 18h1M18 18h1" /></symbol>
+    <symbol id="i-mais" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.4" /><circle cx="12" cy="12" r="1.4" /><circle cx="19" cy="12" r="1.4" /></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6.2" stroke-width="2.6" /><path d="M12 1v2.6M12 20.4V23M1 12h2.6M20.4 12H23M4.2 4.2l1.9 1.9M17.9 17.9l1.9 1.9M4.2 19.8l1.9-1.9M17.9 6.1l1.9-1.9" stroke-width="3" stroke-linecap="butt" /><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none" /></symbol>
+  </defs>
+</svg>
+
+<div class="proto-banner" id="proto-banner" hidden>Protótipo · somente leitura · decisões e configurações desativadas</div>
+
+<!-- entrada SAPI: experiência visual de chegada, não é login nem proteção -->
+<div id="sapi-gate" role="region" aria-label="Entrada do SAPI">
+  <div class="gate-bg" aria-hidden="true"></div>
+  <div class="gate-shutter">
+    <div class="gate-rail" aria-hidden="true"></div>
+    <div class="gate-panel plate">
+      <svg class="gate-gear" viewBox="0 0 64 64" aria-hidden="true">
+        <circle cx="32" cy="32" r="18" stroke-width="7" />
+        <path d="M32 4v7M32 53v7M4 32h7M53 32h7M12.2 12.2l4.95 4.95M46.85 46.85l4.95 4.95M12.2 51.8l4.95-4.95M46.85 17.15l4.95-4.95" stroke-width="8" stroke-linecap="butt" />
+        <circle cx="32" cy="32" r="5" fill="currentColor" stroke="none" />
+        <path d="M32 19v6M32 39v6M19 32h6M39 32h6" stroke-width="3" />
+      </svg>
+      <p class="gate-title" aria-label="SAPI">SAPI</p>
+      <i class="gate-rule" aria-hidden="true"></i>
+      <p class="gate-name">Sistema Autônomo de Produção para a Internet</p>
+      <p class="gate-hint" id="gate-hint"><span class="only-touch">Deslize para cima para entrar</span><span class="only-pointer">Role para baixo ou arraste para cima</span></p>
+      <div class="gate-track" aria-hidden="true"><i class="gate-fill"></i></div>
+      <button type="button" class="btn gate-enter" onclick="var g=this.closest('#sapi-gate');if(g){g.remove();document.documentElement.classList.remove('gate')}">Entrar</button>
+    </div>
+    <div class="gate-edge" aria-hidden="true"></div>
+  </div>
+</div>
+
+<aside class="side" aria-label="Navegação">
+  <div class="brand"><img src="/static/icone.png" alt=""><span class="sigla">SAPI</span><span class="nome">Sistema Autônomo de Produção para a Internet</span></div>
+  <nav id="nav">
+    <p class="nav-group">Sua vez</p>
+    <button class="nav" data-view="assuntos"><svg><use href="#i-assuntos" /></svg><span>Assuntos</span><b class="count" id="n-assuntos">0</b></button>
+    <button class="nav" data-view="cortes"><svg><use href="#i-cortes" /></svg><span>Cortes</span><b class="count" id="n-cortes">0</b></button>
+    <button class="nav" data-view="prontos"><svg><use href="#i-prontos" /></svg><span>Prontos p/ postar</span><b class="count" id="n-prontos">0</b></button>
+    <button class="nav" data-view="pagina"><svg><use href="#i-pagina" /></svg><span>Vídeos de Página</span></button>
+    <button class="nav" data-view="producao"><svg><use href="#i-producao" /></svg><span>Produção</span></button>
+    <button class="nav" data-view="arquivo"><svg><use href="#i-arquivo" /></svg><span>Adiados e rejeitados</span></button>
+    <p class="nav-group">Sistema</p>
+    <button class="nav" data-view="painel"><svg><use href="#i-painel" /></svg><span>Painel</span></button>
+    <button class="nav" data-view="celular"><svg><use href="#i-celular" /></svg><span>Celular</span><i class="dotmini" id="remote-dot"></i></button>
+    <button class="nav" data-view="relatorios"><svg><use href="#i-relatorios" /></svg><span>Relatórios</span><b class="count warn" id="n-relatorios">0</b></button>
+  </nav>
+</aside>
+
+<div class="main">
+  <header class="top">
+    <div class="status" id="status"><span class="mech" aria-hidden="true"><svg><use href="#i-gear" /></svg></span><span class="dot"></span><span id="status-text">Carregando…</span></div>
+    <button class="icon-btn" id="go-celular" aria-label="Acesso pelo celular" title="Acesso pelo celular"><svg><use href="#i-celular" /></svg></button>
+  </header>
+
+  <main id="views">
+    <!-- revisão (assuntos e cortes compartilham a mesma tela) -->
+    <section id="v-review" class="view">
+      <div class="view-head">
+        <h1 id="review-title">Assuntos</h1>
+        <p class="sub" id="session"></p>
+      </div>
+      <details class="pedir" id="pedir" hidden>
+        <summary>＋ Pedir assuntos novos</summary>
+        <form id="pedir-form" class="pedir-form">
+          <label>Tema <span class="muted">(nomes ou termos separados por vírgula)</span>
+            <input name="tema" maxlength="300" placeholder="Ex.: Meu Canal, Canal Parceiro"></label>
+          <label>Categoria <span class="muted">(opcional)</span>
+            <input name="categoria" list="cats" maxlength="80" placeholder="Ex.: live">
+            <datalist id="cats"><option>live</option><option>podcast</option><option>entrevista</option><option>debate</option>
+              <option>games</option><option>humor</option><option>react</option><option>notícias</option><option>esportes</option><option>ciência</option></datalist></label>
+          <div class="row2">
+            <label>Quantidade <span class="muted">(opcional)</span><input name="quantidade" type="number" min="1" max="30" placeholder="12"></label>
+            <label>Visualizações mínimas
+              <select name="min_visualizacoes"><option value="">qualquer</option><option value="100000">100 mil+</option>
+                <option value="500000">500 mil+</option><option value="1000000">1 milhão+</option><option value="5000000">5 milhões+</option></select></label>
+          </div>
+          <button class="btn" type="submit">Pesquisar agora</button>
+        </form>
+      </details>
+      <div id="paused" class="empty" hidden><p>Revisão pausada.</p><button class="btn" id="resume">Retomar</button></div>
+      <div id="empty" class="empty" hidden><p>Nada aguardando sua decisão nesta fila.</p></div>
+      <article id="card" class="card review plate" hidden>
+        <div id="player-wrap" hidden><video id="player" controls preload="metadata" playsinline></video></div>
+        <div class="card-head">
+          <h2 id="c-title"></h2>
+          <p class="meta" id="c-sub"></p>
+          <div class="pills" id="c-pills"></div>
+        </div>
+        <div id="c-alerts"></div>
+        <div id="c-body" class="fields"></div>
+      </article>
+      <div id="controls" class="controls" hidden>
+        <details class="reasons-box"><summary>Motivo (opcional)</summary><div class="reasons" id="reasons"></div></details>
+        <div class="buttons">
+          <button class="b b100" data-score="100"><span>Muito aprovado</span><kbd>1</kbd></button>
+          <button class="b b50" data-score="50"><span>Aprovado</span><kbd>2</kbd></button>
+          <button class="b b0" data-score="0"><span>Adiar</span><kbd>3</kbd></button>
+          <button class="b bm50" data-score="-50"><span>Desaprovado</span><kbd>4</kbd></button>
+          <button class="b bm100" data-score="-100"><span>Muito desaprovado</span><kbd>5</kbd></button>
+        </div>
+        <div class="aux">
+          <button class="ghost" id="prev">← Desfazer última <kbd>U</kbd></button>
+          <button class="ghost" id="pause">Pausar <kbd>P</kbd></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="v-pagina" class="view" hidden></section>
+    <section id="v-producao" class="view" hidden></section>
+    <section id="v-prontos" class="view" hidden></section>
+    <section id="v-relatorios" class="view" hidden></section>
+    <section id="v-arquivo" class="view" hidden></section>
+    <section id="v-painel" class="view" hidden></section>
+    <section id="v-celular" class="view" hidden></section>
+  </main>
+</div>
+
+<nav class="tabbar" aria-label="Navegação">
+  <button class="tb" data-view="assuntos"><svg><use href="#i-assuntos" /></svg><span>Assuntos</span><b class="count" id="m-assuntos"></b></button>
+  <button class="tb" data-view="cortes"><svg><use href="#i-cortes" /></svg><span>Cortes</span><b class="count" id="m-cortes"></b></button>
+  <button class="tb" data-view="producao"><svg><use href="#i-producao" /></svg><span>Produção</span></button>
+  <button class="tb" data-view="prontos"><svg><use href="#i-prontos" /></svg><span>Prontos</span><b class="count" id="m-prontos"></b></button>
+  <button class="tb" id="more" aria-haspopup="dialog" aria-controls="sheet"><svg><use href="#i-mais" /></svg><span>Mais</span></button>
+</nav>
+<div class="sheet" id="sheet" hidden>
+  <div class="sheet-body" role="dialog" aria-label="Mais seções">
+    <p class="nav-group">Sua vez</p>
+    <button class="nav" data-view="pagina"><svg><use href="#i-pagina" /></svg><span>Vídeos de Página</span></button>
+    <button class="nav" data-view="arquivo"><svg><use href="#i-arquivo" /></svg><span>Adiados e rejeitados</span></button>
+    <p class="nav-group">Sistema</p>
+    <button class="nav" data-view="painel"><svg><use href="#i-painel" /></svg><span>Painel</span></button>
+    <button class="nav" data-view="celular"><svg><use href="#i-celular" /></svg><span>Celular</span></button>
+    <button class="nav" data-view="relatorios"><svg><use href="#i-relatorios" /></svg><span>Relatórios</span></button>
+  </div>
+</div>
+
+<!-- PIN do acesso remoto: este é o login de verdade, separado da entrada visual -->
+<div id="login" class="login" hidden>
+  <form id="login-form" class="plate">
+    <span class="lamp big" aria-hidden="true"></span>
+    <strong>SAPI</strong>
+    <label for="pin" class="muted">Digite o PIN definido no computador</label>
+    <input id="pin" type="password" inputmode="numeric" autocomplete="current-password" minlength="6" maxlength="12" required>
+    <button type="submit" class="btn">Entrar</button>
+  </form>
+</div>
+<div id="toast" class="toast" hidden></div>
+<script src="/static/gate.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>

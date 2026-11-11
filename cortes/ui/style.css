@@ -1,0 +1,325 @@
+/* SAPI — Sistema Autônomo de Produção para a Internet
+   Identidade: oficina industrial. Ferro escuro nas superfícies, latão para o que pede a SUA ação,
+   verdete (cobre oxidado) para o trabalho do sistema. Tudo em CSS e SVG próprios; nenhuma textura externa.
+   Desempenho: só transform e opacity animam; nada gira sem produção de verdade. */
+:root {
+  --bg: #121417; --side: #0e1013; --panel: #1a1d22; --panel-2: #22262c; --line: #2b3039; --line-2: #3b424d;
+  --fg: #e9e4d8; --muted: #a5a094; --faint: #7b776e;
+  /* latão: pede a sua ação */
+  --ember: #dcae4c; --ember-2: #b58530; --ember-ink: #231906;
+  /* verdete: o sistema trabalhando */
+  --spirit: #63d4c1; --spirit-2: #2a8c7f; --spirit-ink: #04221e;
+  --copper: #c9805a; --ok: #82d692; --bad: #ff8b7a; --bad-2: #b2463a; --slate: #5b626b;
+  --rivet: #4a515b; --rivet-hi: #6b7380;
+  --radius: 10px;
+  --display: "Bahnschrift", "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+  --mono: "Cascadia Mono", Consolas, ui-monospace, monospace;
+  --plate: linear-gradient(180deg, #ffffff0a, transparent 38%);
+  --brass-grad: linear-gradient(180deg, #f1d07e 0%, #d9ab4a 45%, #a97f2b 100%);
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #e8e3d8; --side: #dcd5c6; --panel: #f5f1e8; --panel-2: #e9e3d6; --line: #cdc4b1; --line-2: #b3a891;
+    --fg: #1d1b17; --muted: #585349; --faint: #777063;
+    --ember: #8a5a00; --ember-2: #6a4400; --ember-ink: #fff7e3;
+    --spirit: #0d6f64; --spirit-2: #0a564d; --spirit-ink: #eafff9;
+    --copper: #9a5a36; --ok: #1e7a3c; --bad: #a9372a; --bad-2: #892c21; --slate: #6b6a63;
+    --rivet: #b9ae98; --rivet-hi: #e2dacb; --plate: linear-gradient(180deg, #ffffff80, transparent 38%);
+    --brass-grad: linear-gradient(180deg, #a87a1f 0%, #8a5a00 55%, #6a4400 100%);
+    color-scheme: light;
+  }
+}
+
+/* ------------------------------------------------------------ base */
+* { box-sizing: border-box }
+html, body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 system-ui, "Segoe UI", sans-serif }
+body { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; overflow-x: hidden }
+h1, h2 { font-family: var(--display); font-weight: 600; letter-spacing: .01em; margin: 0 }
+h1 { font-size: 27px } h2 { font-size: 20px }
+h3 { display: flex; align-items: center; gap: 10px; margin: 26px 0 10px; font: 700 11px/1 var(--display); letter-spacing: .16em; text-transform: uppercase; color: var(--ember) }
+h3::before { content: ""; width: 7px; height: 7px; background: var(--ember); transform: rotate(45deg); flex: none }
+h3::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--line-2), transparent) }
+a { color: var(--spirit) } [hidden] { display: none !important }
+svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none }
+kbd { font: 11px var(--mono); padding: 0 5px; border-radius: 4px; background: #0004; border: 1px solid #fff2; color: var(--muted) }
+.muted { color: var(--muted) } .faint { color: var(--faint) }
+:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px }
+button { font: inherit }
+
+/* chapas e rebites (decoração barata: só gradientes estáticos) */
+.plate { background-image: var(--plate), radial-gradient(circle at 9px 9px, var(--rivet) 1.8px, var(--rivet-hi) 2.3px, transparent 3px),
+  radial-gradient(circle at calc(100% - 9px) 9px, var(--rivet) 1.8px, var(--rivet-hi) 2.3px, transparent 3px),
+  radial-gradient(circle at 9px calc(100% - 9px), var(--rivet) 1.8px, var(--rivet-hi) 2.3px, transparent 3px),
+  radial-gradient(circle at calc(100% - 9px) calc(100% - 9px), var(--rivet) 1.8px, var(--rivet-hi) 2.3px, transparent 3px) }
+
+.proto-banner { position: fixed; top: 0; left: 50%; transform: translateX(-50%); z-index: 20; background: var(--ember); color: var(--ember-ink);
+  font-size: 12px; font-weight: 700; padding: 3px 12px; border-radius: 0 0 8px 8px }
+
+/* ------------------------------------------------------------ barra lateral */
+.side { background: var(--side); border-right: 1px solid var(--line); position: sticky; top: 0; height: 100vh; padding: 14px 10px 20px; overflow-y: auto;
+  box-shadow: inset -1px 0 0 #ffffff05 }
+.brand { display: grid; grid-template-columns: 34px 1fr; gap: 2px 10px; align-items: center; padding: 6px 8px 14px; border-bottom: 1px solid var(--line); margin-bottom: 6px }
+.brand img { width: 34px; height: 34px; border-radius: 8px; grid-row: span 2; border: 1px solid var(--line-2); background: #000 }
+.brand .sigla { font: 700 22px/1 var(--display); letter-spacing: .14em; background: var(--brass-grad); -webkit-background-clip: text; background-clip: text; color: transparent }
+.brand .nome { font-size: 9.5px; line-height: 1.25; letter-spacing: .04em; text-transform: uppercase; color: var(--faint) }
+.lamp { width: 12px; height: 12px; border-radius: 50%; background: var(--ember); box-shadow: 0 0 10px 3px #dcae4c55; flex: none }
+.lamp.big { width: 22px; height: 22px; box-shadow: 0 0 22px 6px #dcae4c44; margin: 0 auto }
+.nav-group { display: flex; align-items: center; gap: 8px; font: 700 10.5px/1 var(--display); text-transform: uppercase; letter-spacing: .18em; color: var(--ember-2); margin: 16px 8px 6px }
+.nav-group::after { content: ""; flex: 1; height: 1px; background: var(--line) }
+.nav { display: flex; align-items: center; gap: 10px; width: 100%; padding: 9px 10px; margin: 1px 0; border: 0; border-radius: 8px;
+  background: none; color: var(--muted); text-align: left; cursor: pointer; position: relative }
+.nav:hover { background: var(--panel); color: var(--fg) }
+.nav.on { background: var(--panel-2); color: var(--fg); box-shadow: inset 0 1px 0 #ffffff0a }
+.nav.on::before { content: ""; position: absolute; left: -10px; top: 8px; bottom: 8px; width: 3px; border-radius: 0 3px 3px 0; background: var(--ember); box-shadow: 0 0 8px #dcae4c66 }
+.nav span { flex: 1 }
+.count { min-width: 22px; text-align: center; font: 700 12px/18px var(--mono); padding: 0 7px; border-radius: 6px; background: var(--ember); color: var(--ember-ink) }
+.count:empty, .count.zero { display: none }
+.count.warn { background: var(--bad-2); color: #fff }
+.dotmini { width: 8px; height: 8px; border-radius: 50%; background: var(--slate) } .dotmini.on { background: var(--ok); box-shadow: 0 0 6px var(--ok) }
+
+/* ------------------------------------------------------------ topo: painel de estado da máquina */
+.main { min-width: 0; display: flex; flex-direction: column }
+.top { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 10px; padding: 9px 24px;
+  background: var(--side); border-bottom: 1px solid var(--line); box-shadow: 0 1px 0 #ffffff05 }
+.status { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; font-size: 14px }
+.status #status-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.mech { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--panel); border: 1px solid var(--line-2); color: var(--faint); flex: none }
+.mech svg { width: 18px; height: 18px; stroke-width: 2.4 }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--slate); flex: none; box-shadow: inset 0 1px 2px #0008 }
+.st-trabalhando .mech { color: var(--spirit); border-color: var(--spirit-2) }
+.st-trabalhando .mech svg { animation: spin 4s linear infinite }
+.st-trabalhando .dot { background: var(--spirit); box-shadow: 0 0 8px var(--spirit) }
+.st-aguardando_voce .dot { background: var(--ember); box-shadow: 0 0 8px var(--ember) }
+.st-aguardando_voce .mech { color: var(--ember); border-color: var(--ember-2) }
+.st-aguardando .dot { background: var(--ember-2) } .st-parado .dot { background: var(--bad) }
+@keyframes spin { to { transform: rotate(360deg) } }
+@keyframes pulse { 50% { opacity: .4 } }
+.icon-btn { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 9px; border: 1px solid var(--line-2); background: var(--panel); color: var(--fg); cursor: pointer }
+.icon-btn:hover { border-color: var(--ember-2); color: var(--ember) }
+
+main { padding: 22px 24px 120px; max-width: 1100px; width: 100%; margin: 0 auto }
+.view-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--line) }
+.sub { color: var(--muted); font-size: 13px; margin: 0 }
+
+/* ------------------------------------------------------------ cartões e campos */
+.card, .empty { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius) }
+.card { padding: 18px; background-image: var(--plate) } .empty { padding: 40px; text-align: center; color: var(--muted); border-style: dashed }
+.card-head { margin-bottom: 10px } .meta { color: var(--muted); font-size: 13px; margin: 4px 0 0 }
+.pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px }
+.pill { font-size: 12px; padding: 2px 9px; border-radius: 6px; border: 1px solid var(--line-2); color: var(--muted); background: #0002 }
+.pill.ember { border-color: var(--ember-2); color: var(--ember) } .pill.spirit { border-color: var(--spirit-2); color: var(--spirit) }
+.pill.bad { border-color: var(--bad-2); color: var(--bad) } .pill.ok { border-color: var(--ok); color: var(--ok) }
+#player { width: 100%; max-height: 54vh; background: #000; border-radius: 8px; margin-bottom: 12px; border: 1px solid var(--line-2) }
+.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px 20px; margin-top: 8px }
+.f b { display: block; font: 700 10.5px var(--display); text-transform: uppercase; letter-spacing: .12em; color: var(--faint) }
+.f pre { white-space: pre-wrap; font: inherit; margin: 2px 0; max-height: 240px; overflow: auto }
+.alert { border: 1px solid var(--ember-2); border-left-width: 4px; background: #dcae4c12; color: var(--fg); padding: 7px 11px; border-radius: 6px; margin: 6px 0; font-size: 14px }
+
+/* ------------------------------------------------------------ os cinco botões: teclas de painel */
+.controls { position: sticky; bottom: 0; padding: 12px 0 calc(8px + env(safe-area-inset-bottom)); background: linear-gradient(transparent, var(--bg) 22%) }
+.reasons-box summary { cursor: pointer; color: var(--muted); font-size: 13px; margin-bottom: 6px }
+.reasons { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px }
+.chip { border: 1px solid var(--line-2); background: var(--panel); color: var(--fg); border-radius: 14px; padding: 4px 11px; font-size: 12px; cursor: pointer }
+.chip.on { background: var(--ember); border-color: var(--ember); color: var(--ember-ink) }
+.buttons { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px }
+.b { border: 0; border-radius: 9px; padding: 14px 6px; font: 700 13px system-ui; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  transition: transform .06s, box-shadow .06s; box-shadow: 0 3px 0 #0006, inset 0 1px 0 #ffffff33 }
+.b:active { transform: translateY(2px); box-shadow: 0 1px 0 #0006, inset 0 1px 0 #ffffff22 }
+.b100 { background: var(--spirit); color: var(--spirit-ink) }
+.b50 { background: var(--spirit-2); color: #eafffc }
+.b0 { background: var(--panel-2); color: var(--fg); border: 1px solid var(--line-2) }
+.bm50 { background: var(--ember-2); color: var(--ember-ink) }
+.bm100 { background: var(--bad-2); color: #fff }
+.aux { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap }
+.ghost, .btn { border-radius: 8px; padding: 8px 12px; font: 600 13px system-ui; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px }
+.ghost { border: 1px solid var(--line-2); background: transparent; color: var(--muted) } .ghost:hover { color: var(--fg); border-color: var(--ember-2) }
+.btn { border: 0; background: var(--ember); color: var(--ember-ink); box-shadow: inset 0 1px 0 #ffffff55, 0 1px 0 #0006 }
+.btn.sec { background: var(--panel-2); color: var(--fg); border: 1px solid var(--line-2); box-shadow: none }
+.btn:disabled { opacity: .5; cursor: not-allowed }
+
+/* ------------------------------------------------------------ filtros (segmentados) */
+.seg { display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 3px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; margin: 0 0 14px }
+.seg button, .seg-b { border: 0; background: none; color: var(--muted); padding: 6px 11px; border-radius: 7px; font: 600 13px system-ui; cursor: pointer }
+.seg button.on, .seg-b.on { background: var(--panel-2); color: var(--fg); box-shadow: inset 0 -2px 0 var(--ember) }
+.seg button .n { font-weight: 400; color: var(--faint); margin-left: 4px; font-family: var(--mono) }
+.seg-b .count { margin-left: 4px; background: var(--panel); color: var(--muted); border: 1px solid var(--line-2) }
+.seg-b.on .count { background: var(--ember); color: var(--ember-ink); border-color: var(--ember) }
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px }
+.toolbar .seg { margin: 0 }
+select { background: var(--panel); color: var(--fg); border: 1px solid var(--line-2); border-radius: 8px; padding: 7px 10px; font: inherit }
+
+/* ------------------------------------------------------------ relatórios */
+.rep { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--slate); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 10px }
+.rep.APROVADO { border-left-color: var(--ok) } .rep.APROVADO_COM_RESSALVAS { border-left-color: var(--ember) } .rep.REPROVADO { border-left-color: var(--bad) }
+.rep-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px }
+.badge { font-size: 12px; font-weight: 700; padding: 2px 9px; border-radius: 6px }
+.badge.APROVADO { background: #82d69222; color: var(--ok) } .badge.APROVADO_COM_RESSALVAS { background: #dcae4c22; color: var(--ember) }
+.badge.REPROVADO { background: #ff8b7a22; color: var(--bad) }
+.rep-stage { font-family: var(--display); font-size: 16px } .rep-when { margin-left: auto; color: var(--faint); font-size: 12px; font-family: var(--mono) }
+.rep-item { color: var(--muted); font-size: 13px; margin: 4px 0 8px }
+.rep-trail { font-size: 12px; color: var(--faint); margin-bottom: 8px }
+.rep-trail b { color: var(--muted); font-weight: 600 }
+.blk { margin: 8px 0 0; padding: 8px 12px; border-radius: 6px; font-size: 14px }
+.blk h4 { margin: 0 0 4px; font: 700 11px var(--display); text-transform: uppercase; letter-spacing: .1em }
+.blk ul { margin: 0; padding-left: 18px } .blk li { margin: 3px 0 }
+.blk.prob { background: #ff8b7a14 } .blk.prob h4 { color: var(--bad) }
+.blk.ress { background: #dcae4c12 } .blk.ress h4 { color: var(--ember) }
+.blk.rec { background: #63d4c112 } .blk.rec h4 { color: var(--spirit) }
+details.evid { margin-top: 8px; font-size: 13px; color: var(--muted) } details.evid summary { cursor: pointer }
+.decision { font-size: 12px; padding: 2px 8px; border-radius: 6px; border: 1px solid var(--line-2) }
+.decision.AVANCAR { color: var(--ok); border-color: var(--ok) } .decision.REPETIR_OU_BLOQUEAR { color: var(--bad); border-color: var(--bad) }
+
+/* ------------------------------------------------------------ listas (arquivo, prontos) */
+.list { display: grid; gap: 8px }
+.row { display: flex; gap: 12px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px }
+.row .grow { flex: 1; min-width: 0 } .row .t { font-weight: 600 } .row .s { color: var(--muted); font-size: 13px; overflow-wrap: anywhere }
+.row .why { font-size: 13px; color: var(--fg); margin-top: 4px; padding-left: 10px; border-left: 2px solid var(--ember-2) }
+
+.ready-list { display: grid; gap: 10px }
+.ready { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden }
+.ready > summary { list-style: none; display: flex; align-items: center; gap: 12px; padding: 12px 14px; cursor: pointer; flex-wrap: wrap }
+.ready > summary::-webkit-details-marker { display: none }
+.ready > summary .when { font: 600 13px var(--mono); color: var(--ember); min-width: 92px }
+.ready > summary .t { flex: 1; font-weight: 600; min-width: 160px } .ready[open] > summary { border-bottom: 1px solid var(--line); background-image: var(--plate) }
+.ready-body { display: grid; grid-template-columns: minmax(0, 240px) 1fr; gap: 16px; padding: 14px }
+.ready video { width: 100%; max-height: 62vh; background: #000; border-radius: 8px; border: 1px solid var(--line-2) }
+.ready pre { white-space: pre-wrap; font: inherit; margin: 0 0 10px; max-height: 220px; overflow: auto; color: var(--muted) }
+.acts { display: flex; flex-wrap: wrap; gap: 6px }
+
+/* ------------------------------------------------------------ produção: a esteira */
+.now { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 16px 20px; position: relative; overflow: hidden; background-image: var(--plate) }
+.now + .now { margin-top: 8px }
+.belt { position: absolute; left: 0; right: 0; bottom: 0; height: 6px; background: var(--line); overflow: hidden }
+.belt::before { content: ""; position: absolute; inset: 0; width: calc(100% + 24px);
+  background: repeating-linear-gradient(90deg, var(--spirit-2) 0 12px, transparent 12px 24px) }
+.now.run .belt::before { animation: belt 1.2s linear infinite }
+@keyframes belt { to { transform: translateX(-24px) } }
+.bar { height: 6px; background: var(--line); border-radius: 4px; overflow: hidden; margin: 10px 0 6px }
+.bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--spirit-2), var(--spirit)); transition: width .6s }
+.vid { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; margin-bottom: 10px }
+.steps { display: flex; flex-wrap: wrap; gap: 5px; margin: 8px 0 }
+.step { font-size: 12px; border-radius: 6px; padding: 3px 8px; border: 1px solid var(--line-2); color: var(--muted) }
+.step.feito { color: var(--ok); border-color: #82d69255 } .step.agora { background: var(--spirit); color: var(--spirit-ink); border-color: var(--spirit) }
+.step.erro { background: var(--bad-2); color: #fff; border-color: var(--bad-2) } .step.repetindo, .step.interrompido { color: var(--ember); border-color: var(--ember-2) }
+.step.aguardando { opacity: .5 } .step.na-fila { border-style: dashed }
+.cut { margin: 8px 0 0 10px; padding-left: 12px; border-left: 2px solid var(--line-2) }
+.feed { font-size: 14px; padding-left: 18px } .feed li { margin: 4px 0 }
+
+/* ------------------------------------------------------------ painel: mostradores */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px }
+.kpi { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 12px 10px; background-image: var(--plate); position: relative }
+.kpi::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 0; height: 2px; background: var(--line-2) }
+.kpi b { display: block; font: 600 26px/1.15 var(--display); font-variant-numeric: tabular-nums } .kpi span { color: var(--muted); font-size: 12.5px }
+.kpi.ember b { color: var(--ember) } .kpi.ember::after { background: var(--ember) }
+.kpi.spirit b { color: var(--spirit) } .kpi.spirit::after { background: var(--spirit) }
+.tbl { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; font-size: 13px }
+.tbl th, .tbl td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; overflow-wrap: anywhere }
+.tbl th { color: var(--faint); font: 700 10.5px var(--display); text-transform: uppercase; letter-spacing: .1em; background: var(--panel-2) }
+.weight { display: inline-block; min-width: 46px; text-align: right; font-variant-numeric: tabular-nums; font-family: var(--mono) }
+.weight.pos { color: var(--ok) } .weight.neg { color: var(--bad) }
+textarea { width: 100%; min-height: 260px; font: 12px var(--mono); background: var(--panel); color: var(--fg); border: 1px solid var(--line-2); border-radius: 8px; padding: 10px }
+.cc { padding: 14px; border: 1px solid var(--line); border-radius: 10px; margin-bottom: 16px; background: var(--panel); display: grid; gap: 10px }
+
+/* ------------------------------------------------------------ celular */
+.remote-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; display: grid; gap: 14px }
+.remote-state { display: flex; flex-wrap: wrap; gap: 8px }
+.url { display: flex; align-items: center; gap: 8px; background: var(--panel-2); border: 1px solid var(--line-2); border-radius: 10px; padding: 10px 12px; font: 600 16px var(--mono); color: var(--spirit) }
+.url span { flex: 1; overflow-wrap: anywhere }
+.steps-guide { margin: 0; padding-left: 20px; color: var(--muted) } .steps-guide li { margin: 4px 0 }
+input[type=password], input[type=text] { background: var(--panel-2); color: var(--fg); border: 1px solid var(--line-2); border-radius: 8px; padding: 8px 10px; font: inherit }
+
+/* ------------------------------------------------------------ login (PIN do acesso remoto), aviso, folha "mais" */
+.login { position: fixed; inset: 0; background: var(--bg); display: grid; place-items: center; z-index: 30 }
+.login form { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 26px; display: grid; gap: 12px; width: min(330px, 90vw); text-align: center }
+.login strong { font: 700 24px/1 var(--display); letter-spacing: .14em; background: var(--brass-grad); -webkit-background-clip: text; background-clip: text; color: transparent }
+.login input { font-size: 22px; letter-spacing: .3em; text-align: center }
+.toast { position: fixed; bottom: 86px; left: 50%; transform: translateX(-50%); background: var(--fg); color: var(--bg); padding: 9px 16px; border-radius: 8px; z-index: 40; font-weight: 600; box-shadow: 0 6px 20px #0008 }
+.tabbar, .sheet { display: none }
+
+/* ------------------------------------------------------------ pedir assuntos */
+.pedir { margin: 0 0 16px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--panel) }
+.pedir summary { cursor: pointer; padding: 10px 14px; color: var(--ember); font-weight: 600; list-style: none }
+.pedir summary::-webkit-details-marker { display: none }
+.pedir-form { display: grid; gap: 10px; padding: 0 14px 14px }
+.pedir-form label { display: grid; gap: 4px; font-size: 13px }
+.pedir-form input, .pedir-form select { padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line-2); background: var(--panel-2); color: inherit; font: inherit }
+.pedir-form select option { color: #000 }
+.pedir-form .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px }
+.pg-pedir { padding: 0; margin: 0 0 16px; background: none; border: 0 }
+.pg-pedir .btn { width: 100% }
+
+/* postado por rede, destino do arquivo, cota */
+.acts.plats { margin-top: 8px }
+.btn.on-plat { background: #82d69222; color: var(--ok); border: 1px solid var(--ok); box-shadow: none }
+.fate { font-size: 12px; color: var(--muted); margin: 8px 0 0 }
+.fate.gone { color: var(--spirit) }
+.gone-box { display: grid; place-items: center; min-height: 120px; border: 1px dashed var(--line-2); border-radius: 10px; color: var(--muted) }
+.cota { margin: 0 0 12px; padding: 10px 14px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--panel) }
+.cota .bar { margin-top: 6px }
+.cota.quase .bar i { background: var(--ember) }
+.cota.cheia { border-color: var(--bad) }
+.cota.cheia .bar i { background: var(--bad) }
+
+/* ------------------------------------------------------------ celular: tabbar e folha */
+@media (max-width: 760px) {
+  body { grid-template-columns: 1fr }
+  .side { display: none }
+  .top { padding: 9px 14px } main { padding: 14px 14px 140px }
+  .tabbar { display: grid; grid-template-columns: repeat(5, 1fr); position: fixed; bottom: 0; left: 0; right: 0; z-index: 10;
+    background: var(--side); border-top: 1px solid var(--line); box-shadow: 0 -1px 0 #ffffff05; padding: 6px 4px calc(6px + env(safe-area-inset-bottom)) }
+  .tb { display: flex; flex-direction: column; align-items: center; gap: 2px; border: 0; background: none; color: var(--muted); font: 600 11px system-ui; padding: 4px; position: relative; cursor: pointer }
+  .tb.on { color: var(--ember) } .tb .count { position: absolute; top: 0; right: 18%; min-width: 18px; font-size: 10px; line-height: 16px; padding: 0 5px }
+  .sheet { display: block; position: fixed; inset: 0; background: #000a; z-index: 15 }
+  .sheet[hidden] { display: none }
+  .sheet-body { position: absolute; left: 0; right: 0; bottom: 0; background: var(--side); border-radius: 16px 16px 0 0; border-top: 1px solid var(--line-2); padding: 12px 12px calc(76px + env(safe-area-inset-bottom)) }
+  .controls { bottom: 62px }
+  .buttons { grid-template-columns: 1fr 1fr } .b100 { grid-column: span 2 } .b { padding: 15px 4px } kbd { display: none }
+  .ready-body { grid-template-columns: 1fr } .fields { grid-template-columns: 1fr }
+  .rep-when { margin-left: 0; width: 100% }
+}
+
+/* ------------------------------------------------------------ entrada SAPI (porta industrial; NÃO é segurança) */
+#sapi-gate { display: none }
+html.gate #sapi-gate { display: block }
+html.gate { overflow: hidden }
+#sapi-gate { position: fixed; inset: 0; z-index: 25; touch-action: none; user-select: none; -webkit-user-select: none; outline: 0; overflow: hidden }
+.gate-bg { position: absolute; inset: 0; background:
+  radial-gradient(60% 50% at 20% 15%, #63d4c118, transparent 70%),
+  radial-gradient(50% 45% at 85% 85%, #dcae4c14, transparent 70%),
+  linear-gradient(180deg, #0b0d10, #121417);
+  transition: opacity .6s .15s }
+.gate-shutter { position: absolute; inset: 0; display: grid; place-items: center; background: var(--side);
+  background-image: repeating-linear-gradient(90deg, #ffffff03 0 2px, transparent 2px 64px), var(--plate);
+  box-shadow: 0 12px 40px #000c; will-change: transform; transition: transform .75s cubic-bezier(.2, .8, .2, 1) }
+.gate-rail { position: absolute; top: 0; left: 0; right: 0; height: 14px; background: linear-gradient(180deg, #2b3039, #1a1d22); border-bottom: 1px solid var(--line-2) }
+.gate-edge { position: absolute; left: 0; right: 0; bottom: 0; height: 8px; background: var(--brass-grad); box-shadow: 0 -1px 0 #ffffff33, 0 2px 6px #000a }
+.gate-panel { display: grid; justify-items: center; gap: 14px; padding: 36px 28px 30px; width: min(560px, 92vw); border: 1px solid var(--line-2); border-radius: 14px; background: var(--panel); text-align: center }
+.gate-gear { width: 72px; height: 72px; color: var(--ember); stroke-width: 1; will-change: transform; transition: transform .35s }
+.gate-title { font: 700 clamp(64px, 18vw, 128px)/.95 var(--display); letter-spacing: .16em; margin-left: .16em;
+  background: var(--brass-grad); -webkit-background-clip: text; background-clip: text; color: transparent }
+.gate-rule { display: block; width: 72%; height: 1px; background: linear-gradient(90deg, transparent, var(--ember-2), transparent); transform: scaleX(0); animation: rule .9s .35s cubic-bezier(.2, .8, .2, 1) both }
+.gate-name { margin: 0; font: 600 clamp(10px, 2.6vw, 12.5px)/1.5 var(--display); letter-spacing: .28em; text-transform: uppercase; color: var(--muted); animation: reveal .8s .7s both }
+.gate-hint { margin: 10px 0 0; font-size: 13px; color: var(--faint); display: flex; align-items: center; gap: 8px }
+.gate-hint::before { content: ""; width: 9px; height: 9px; border-left: 2px solid var(--faint); border-top: 2px solid var(--faint); transform: rotate(45deg) translateY(2px); animation: nudge 1.8s ease-in-out infinite }
+.gate-hint .only-touch { display: none }
+@media (hover: none) and (pointer: coarse) { .gate-hint .only-touch { display: inline } .gate-hint .only-pointer { display: none } }
+.gate-track { width: 180px; height: 4px; background: var(--line); border-radius: 2px; overflow: hidden }
+.gate-fill { display: block; height: 100%; background: var(--ember); transform: scaleX(0); transform-origin: left; transition: transform .1s linear }
+#sapi-gate.armed .gate-fill { background: var(--spirit) }
+#sapi-gate.armed .gate-gear { color: var(--spirit) }
+.gate-enter { margin-top: 4px; padding: 10px 26px; font-size: 14px; letter-spacing: .06em }
+#sapi-gate.open .gate-shutter { transform: translate3d(0, -104%, 0) }
+#sapi-gate.open .gate-bg { opacity: 0 }
+html.gate .side, html.gate .main, html.gate .tabbar { opacity: .55; transition: opacity .7s }
+@keyframes reveal { from { opacity: 0; transform: translateY(8px) } to { opacity: 1; transform: none } }
+@keyframes rule { to { transform: scaleX(1) } }
+@keyframes nudge { 0%, 100% { transform: rotate(45deg) translateY(4px) } 50% { transform: rotate(45deg) translateY(-2px) } }
+
+/* ------------------------------------------------------------ economia: nada se mexe com a aba escondida ou com movimento reduzido */
+body.idle * { animation-play-state: paused !important }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important }
+  #sapi-gate.open { opacity: 0; transition: opacity .2s !important }
+  .gate-rule { transform: scaleX(1) }
+}

@@ -1,0 +1,70 @@
+# ---- dados do usuário (NUNCA vão para o repositório)
+PRODUCAO/
+dados/
+*.db
+*.db-wal
+*.db-shm
+*.sqlite*
+*.lock
+gerente.lock
+
+# vídeos, áudios e mídias baixadas ou geradas
+*.mp4
+*.mkv
+*.webm
+*.mov
+*.m4a
+*.m4v
+*.wav
+*.mp3
+*.opus
+*.aac
+*.flac
+*.part
+*.ytdl
+
+# logs, relatórios e temporários
+*.log
+*.jsonl
+LOGS/
+RELATORIOS/
+*.tmp
+tmp/
+temp/
+
+# ---- ambiente e dependências regeneráveis
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+modelos/
+*.onnx
+*.bin
+
+# ---- segredos e configuração pessoal
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+cookies*.txt
+*cookies*
+rclone.conf
+config.json
+CONFIGURACOES/
+.claude/settings.local.json
+.claude/launch.json
+.claude/projects/
+.claude/todos/
+
+# ---- backups e editores
+*.bak
+*.backup
+Backups/
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.DS_Store

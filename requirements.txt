@@ -1,0 +1,5 @@
+# Todas gratuitas e de código aberto; versões verificadas com wheels para Python 3.14 / Windows x64 (08/11/2026)
+faster-whisper==1.2.1   # MIT — transcrição local em CPU (CTranslate2, int8)
+sherpa-onnx==2.0.1      # Apache-2.0 — separação de vozes (diarização) em CPU via ONNX
+yt-dlp==2026.10.26      # Unlicense — verificação de disponibilidade e aquisição autorizada
+# Externos (não pip): FFmpeg 9.0.2 (Gyan, winget) e Node.js 24 (runtime JS exigido pelo yt-dlp para o YouTube)
