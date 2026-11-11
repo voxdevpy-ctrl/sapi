@@ -323,3 +323,52 @@ body.idle * { animation-play-state: paused !important }
   #sapi-gate.open { opacity: 0; transition: opacity .2s !important }
   .gate-rule { transform: scaleX(1) }
 }
+
+/* ------------------------------------------------------------ profundidade: fundo → painéis → itens
+   Três planos: o fundo da oficina (mais escuro, com vinheta), os painéis/HUDs (chapas levantadas, com sombra)
+   e os campos de texto (rebaixados na chapa). Tudo estático: sombras e gradientes, nada animado. */
+:root {
+  --deep: #0b0c0f;
+  --sh-hud: 0 1px 0 #ffffff0d inset, 0 -1px 0 #00000080 inset, 0 10px 24px -8px #000000d0, 0 2px 4px #00000080;
+  --sh-card: 0 1px 0 #ffffff12 inset, 0 -1px 0 #0000008c inset, 0 14px 30px -12px #000000e6, 0 3px 7px -2px #000000a6;
+  --sh-raise: 0 1px 0 #ffffff14 inset, 0 6px 14px -6px #000000cc, 0 1px 2px #00000099;
+  --sh-well: inset 0 2px 5px #000000b3, inset 0 0 0 1px #0000004d, 0 1px 0 #ffffff0d;
+  --well: #0f1114;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --deep: #d6cfbf;
+    --sh-hud: 0 1px 0 #ffffffcc inset, 0 8px 18px -10px #4a3f2a66, 0 1px 3px #4a3f2a40;
+    --sh-card: 0 1px 0 #ffffffd9 inset, 0 12px 26px -14px #4a3f2a80, 0 2px 5px -1px #4a3f2a40;
+    --sh-raise: 0 1px 0 #ffffffcc inset, 0 5px 12px -7px #4a3f2a73, 0 1px 2px #4a3f2a33;
+    --sh-well: inset 0 2px 4px #4a3f2a40, inset 0 0 0 1px #4a3f2a1f, 0 1px 0 #ffffffb3;
+    --well: #ece6d9;
+  }
+}
+/* plano 0: o chão da oficina, com vinheta que afunda as bordas */
+html, body { background: var(--deep) }
+body { background: var(--deep) }
+/* camada fixa (desenhada uma vez, sem repintar ao rolar): luz no centro, bordas afundadas */
+body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(120% 90% at 55% 0%, var(--bg) 0%, var(--deep) 72%) }
+/* plano 1: HUDs fixos (barra lateral, topo, tabbar) ficam por cima, com sombra para dentro da área */
+.side { box-shadow: 1px 0 0 #ffffff08 inset, 8px 0 24px -10px #000000e6; position: sticky; z-index: 6 }
+.top { box-shadow: var(--sh-hud) }
+@media (max-width: 760px) { .tabbar { box-shadow: 0 -10px 24px -10px #000000e6, 0 1px 0 #ffffff0d inset } .sheet-body { box-shadow: 0 -16px 40px -12px #000000f2 } }
+/* plano 2: painéis e cartões levantados */
+.card, .now, .vid, .rep, .kpi, .ready, .cc, .remote-card, .cota, .pedir, .row, .tbl, .seg, .login form, .gate-panel {
+  box-shadow: var(--sh-card) }
+.row, .kpi, .seg { box-shadow: var(--sh-raise) }
+.ready[open] { box-shadow: var(--sh-card), 0 0 0 1px var(--line-2) }
+.view-head { border-bottom-color: transparent; box-shadow: 0 1px 0 var(--line), 0 2px 0 #ffffff06 }
+/* plano 3: itens dentro dos painéis */
+.pill, .step, .chip { box-shadow: 0 1px 0 #ffffff0a inset, 0 1px 2px #00000066 }
+.btn.sec, .ghost, .seg-b, .icon-btn { box-shadow: var(--sh-raise) }
+.ready-body video, #player, .gone-box { box-shadow: 0 8px 20px -10px #000000e6, 0 0 0 1px #00000066 }
+/* campos de texto e caixas de leitura: rebaixados na chapa */
+input[type=password], input[type=text], input[type=number], .pedir-form input, .pedir-form select, select, textarea,
+.url, .f pre, .ready pre, .bar, .gate-track {
+  background-color: var(--well); box-shadow: var(--sh-well); border-color: #00000059 }
+input:focus-visible, select:focus-visible, textarea:focus-visible { box-shadow: var(--sh-well), 0 0 0 2px var(--ember) }
+.empty { background: var(--well); box-shadow: var(--sh-well) }
+.f pre, .ready pre { padding: 8px 10px; border-radius: 6px; border: 1px solid #00000059 }
