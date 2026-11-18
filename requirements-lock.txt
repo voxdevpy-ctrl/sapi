@@ -4,7 +4,7 @@ click==8.5.1
 colorama==0.4.6
 ctranslate2==4.8.5
 faster-whisper==1.2.1
-filelock==4.2.9
+filelock==4.2.10
 flatbuffers==25.12.19
 fsspec==2026.9.0
 h11==0.16.0
