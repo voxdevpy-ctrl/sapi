@@ -2,7 +2,7 @@ anyio==4.16.0
 av==19.0.2
 click==8.5.1
 colorama==0.4.6
-ctranslate2==4.8.5
+ctranslate2==4.9.0
 faster-whisper==1.2.1
 filelock==4.2.9
 flatbuffers==25.12.19
